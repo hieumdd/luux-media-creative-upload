@@ -1,0 +1,12 @@
+services:
+    app:
+        image: us-docker.pkg.dev/luux-media/docker-1/luux-media-creative-upload
+        build: .
+        platform: linux/amd64
+        volumes:
+            - ./service-account.json:/service-account.json
+        environment:
+            GOOGLE_APPLICATION_CREDENTIALS: /service-account.json
+        env_file: .env
+        ports:
+            - 8080:8080
