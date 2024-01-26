@@ -24,12 +24,12 @@ export const handleCreativeUpload = async (payload: CreativeUploadBody) => {
     await stagingFile.move(liveFile.name);
     await liveFile.makePublic();
 
-    const [__, adId] = fileName.match(/(.*)\..*/)!;
+    const [__, fn] = fileName.match(/(.*)\..*/)!;
     const data = {
-        ad_id: adId,
+        file_name: fn,
         public_url: liveFile.publicUrl(),
         created_at: payload.timeCreated,
     };
     logger.debug({ fn: 'handleCreativeUpload', details: data });
-    await bucket.file(`metadata/${adId}.json`).save(JSON.stringify(data));
+    await bucket.file(`metadata/${fn}.json`).save(JSON.stringify(data));
 };
