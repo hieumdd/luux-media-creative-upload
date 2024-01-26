@@ -8,7 +8,7 @@ export const handleCreativeUpload = async (payload: CreativeUploadBody) => {
 
     const [exists] = await stagingFile.exists();
     const contentTypeMatch = payload.contentType.match(/image\/.*/);
-    const stagingFileNameMatch = payload.name.match(/staging\/(\d+\..*)/);
+    const stagingFileNameMatch = payload.name.match(/staging\/(.*)/);
 
     if (!exists || !contentTypeMatch! || !stagingFileNameMatch) {
         logger.debug({
