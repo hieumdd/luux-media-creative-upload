@@ -1,10 +1,11 @@
 import { createLogger, format, transports } from 'winston';
-const { combine, printf } = format;
+import stringify from 'safe-stable-stringify';
 
 export const logger = createLogger({
     level: 'debug',
-    format: combine(
-        printf(({ level, message }) => JSON.stringify({ severity: level, ...message })),
-    ),
+    format: format.printf(({ message, level, ...meta }) => {
+        const _message = message instanceof Object ? message : { message };
+        return stringify({ severity: level, ..._message, ...meta })!;
+    }),
     transports: [new transports.Console()],
 });
