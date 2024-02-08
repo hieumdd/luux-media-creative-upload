@@ -12,13 +12,16 @@ export const handleCreativeUpload = async (payload: CreativeUploadBody) => {
 
     if (!exists || !contentTypeMatch! || !stagingFileNameMatch) {
         logger.debug({
-            fn: 'handleCreativeUpload',
+            message: 'Skipping file',
             details: { exists, contentTypeMatch, stagingFileNameMatch },
         });
         return;
     }
 
     const [_, fileName] = stagingFileNameMatch;
+
+    logger.debug({ message: 'fileName', details: { fileName } });
+
     const liveFile = bucket.file(`live/${fileName}`);
 
     await stagingFile.move(liveFile.name);
@@ -29,6 +32,7 @@ export const handleCreativeUpload = async (payload: CreativeUploadBody) => {
         public_url: liveFile.publicUrl(),
         created_at: payload.timeCreated,
     };
-    logger.debug({ fn: 'handleCreativeUpload', details: data });
+    logger.debug({ message: 'Data', details: { data } });
+
     await bucket.file(`metadata/${fn}.json`).save(JSON.stringify(data));
 };
