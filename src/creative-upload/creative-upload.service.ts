@@ -22,7 +22,6 @@ export const handleCreativeUpload = async (payload: CreativeUploadBody) => {
     const liveFile = bucket.file(`live/${fileName}`);
 
     await stagingFile.move(liveFile.name);
-    await liveFile.makePublic();
 
     const [__, fn] = fileName.match(/(.*)\..*/)!;
     const data = {
